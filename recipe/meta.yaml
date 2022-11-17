@@ -1,6 +1,6 @@
 {% set name = "libfaketime" %}
-{% set version = "0.9.8" %}
-{% set sha256 = "06288237cd5890eca148489e5b904ed852ed0ffa8424bfb479342f4daa8442a3" %}
+{% set version = "0.9.9" %}
+{% set sha256 = "57d0181150361c0a9b5c8eef05b11392f6134ada2c2d998e92e63daed639647c" %}
 package:
   name: {{ name|lower }}
   version: {{ version }}
@@ -29,8 +29,7 @@ about:
   license: GPL-2.0
   license_family: GPL
   license_file: COPYING
-  summary: 'libfaketime intercepts various system calls that programs use to retrieve the
-  current date and time.'
+  summary: libfaketime intercepts various system calls that programs use to retrieve the current date and time.
 
   description: |
     libfaketime intercepts various system calls that programs use to retrieve the
