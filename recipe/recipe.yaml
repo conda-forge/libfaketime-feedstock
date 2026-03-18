@@ -1,0 +1,74 @@
+context:
+  name: libfaketime
+  version: "0.9.12"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/wolfcw/${{ name }}/archive/v${{ version }}.tar.gz
+  sha256: 4fc32218697c052adcdc5ee395581f2554ca56d086ac817ced2be0d6f1f8a9fa
+  patches:
+    - arch.patch
+    - test-cc.patch
+
+build:
+  number: 1
+  skip:
+    - win
+  script:
+    env:
+      FAKETIME_COMPILE_CFLAGS: -DFORCE_MONOTONIC_FIX
+    content:
+    - make
+    - if: build_platform == target_platform
+      then: make test
+    - make install PREFIX=$PREFIX
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
+    - make
+  run_exports:
+    - ${{ pin_subpackage('libfaketime', upper_bound='x.x.x') }}
+
+tests:
+  - script:
+      - faketime --help
+      - faketime -f '2008-12-24 08:15:42' python -c "import datetime; print(datetime.datetime.now())"
+      - faketime -f '2008-12-24 08:15:42' python -c "import datetime; print(datetime.datetime.now())" | grep 2008
+    requirements:
+      run:
+        - python
+  - package_contents:
+      bin:
+        - faketime
+      files:
+        - if: linux
+          then:
+            - lib/faketime/libfaketime.so.1
+            - lib/faketime/libfaketimeMT.so.1
+          else:
+            - lib/faketime/libfaketime.1.dylib
+        - share/doc/faketime/NEWS
+        - share/doc/faketime/README
+        - share/man/man1/faketime.1.gz
+      strict: true
+
+about:
+  homepage: https://github.com/wolfcw/libfaketime
+  license: GPL-2.0-only
+  license_file: COPYING
+  summary: libfaketime intercepts various system calls that programs use to retrieve the current date and time.
+  description: |
+    libfaketime intercepts various system calls that programs use to retrieve the
+    current date and time. It then reports modified (faked) dates and times (as
+    specified by you, the user) to these programs. This means you can modify the
+    system time a program sees without having to change the time system-wide.
+
+extra:
+  recipe-maintainers:
+    - pvanheus
+    - pavelzw
