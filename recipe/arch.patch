@@ -1,0 +1,15 @@
+diff --git a/src/Makefile.OSX b/src/Makefile.OSX
+index 405c021..dae9880 100644
+--- a/src/Makefile.OSX
++++ b/src/Makefile.OSX
+@@ -72,8 +72,7 @@ LIB_LDFLAGS += -dynamiclib -current_version 0.9.12 -compatibility_version 0.7
+ ARCH := $(shell uname -m)
+
+ ifeq ($(ARCH),arm64)
+-    CFLAGS += -arch arm64e -arch arm64
+-    CFLAGS += -fptrauth-calls -fptrauth-returns
++    CFLAGS += -arch arm64
+ endif
+
+ SONAME = 1
+ 
